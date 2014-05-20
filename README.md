@@ -2,21 +2,21 @@ top-n
 =====
 
 Building
-====
+======
 
 ```bash
 mvn package
 ```
     
 Running
-====
+======
 
 ```bash
 java -jar top-n/target/top-n-1.0-jar-with-dependencies.jar [OPTIONS]
 ```
     
 Usage
-====
+======
 
 ```bash
 usage: java -jar top-n-1.0-jar-with-dependencies.jar [OPTIONS]
