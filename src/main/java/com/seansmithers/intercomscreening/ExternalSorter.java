@@ -11,9 +11,11 @@ import java.util.List;
 
 public class ExternalSorter {
 
+    private static final int INT_SIZE_BYTES = 4;
     private String inputFile;
     private String outputFile;
     private long fileSliceSize;
+    private long inputFileTotalLines;
     private ExternalSortFileUtil fileUtil;
 
     public ExternalSorter(String inputFile, String outputFile, long fileSliceSize) {
@@ -24,11 +26,11 @@ public class ExternalSorter {
     }
 
     public void sortInputFile() {
-        long totalLines = splitFileIntoSortedSlices(new File(inputFile), fileSliceSize);
-        mergeSortedFileSlicesIntoOutputFile(totalLines);
+        splitFileIntoSortedSlices(new File(inputFile), fileSliceSize);
+        mergeSortedFileSlicesIntoOutputFile();
     }
 
-    private long splitFileIntoSortedSlices(File file, long fileSliceSize) {
+    private void splitFileIntoSortedSlices(File file, long fileSliceSize) {
 
         List<Integer> numbers = new ArrayList<Integer>();
         LineIterator iterator = fileUtil.getLineIteratorForFile(file);
@@ -51,10 +53,10 @@ public class ExternalSorter {
         }
 
         LineIterator.closeQuietly(iterator);
-        return totalLines;
+        inputFileTotalLines = totalLines;
     }
 
-    private void mergeSortedFileSlicesIntoOutputFile(long totalLines) {
+    private void mergeSortedFileSlicesIntoOutputFile() {
         BufferedReader[] readers = fileUtil.getBufferedReadersForFileSlices();
         int[] topNumbers = new int[readers.length];
 
@@ -64,7 +66,7 @@ public class ExternalSorter {
             }
 
             List<Integer> finalSortedNumbers = new ArrayList<Integer>();
-            for (int i = 0; i < totalLines; i++) {
+            for (int i = 0; i < inputFileTotalLines; i++) {
 
                 int index = findIndexOfMaxValue(topNumbers);
                 finalSortedNumbers.add(topNumbers[index]);
@@ -87,11 +89,11 @@ public class ExternalSorter {
 
     /**
      * @param fileSliceSize Size of file slice in bytes
-     * @param numbers       Data to be written to file
+     * @param data          Data to be written to file
      * @return True if the estimated file size of data exceeds desired file size, false otherwise
      */
-    private boolean shouldWriteDataToOutputFile(long fileSliceSize, List<Integer> numbers) {
-        return (numbers.size() * 4) > fileSliceSize;
+    private boolean shouldWriteDataToOutputFile(long fileSliceSize, List<Integer> data) {
+        return (data.size() * INT_SIZE_BYTES) > fileSliceSize;
     }
 
     private void sortAndWriteDataToFile(List<Integer> numbers, int tempFileSuffix) {
