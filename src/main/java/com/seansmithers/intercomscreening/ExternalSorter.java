@@ -14,23 +14,23 @@ public class ExternalSorter {
     private static final int INT_SIZE_BYTES = 4;
     private String inputFile;
     private String outputFile;
-    private long fileSliceSize;
+    private long desiredFileSliceSize;
     private long inputFileTotalLines;
     private ExternalSortFileUtil fileUtil;
 
-    public ExternalSorter(String inputFile, String outputFile, long fileSliceSize) {
+    public ExternalSorter(String inputFile, String outputFile, long desiredFileSliceSize) {
         this.inputFile = inputFile;
         this.outputFile = outputFile;
-        this.fileSliceSize = fileSliceSize;
+        this.desiredFileSliceSize = desiredFileSliceSize;
         fileUtil = new ExternalSortFileUtil();
     }
 
     public void sortInputFile() {
-        splitFileIntoSortedSlices(new File(inputFile), fileSliceSize);
+        splitFileIntoSortedSlices(new File(inputFile), desiredFileSliceSize);
         mergeSortedFileSlicesIntoOutputFile();
     }
 
-    private void splitFileIntoSortedSlices(File file, long fileSliceSize) {
+    private void splitFileIntoSortedSlices(File file, long desiredFileSliceSize) {
 
         List<Integer> numbers = new ArrayList<Integer>();
         LineIterator iterator = fileUtil.getLineIteratorForFile(file);
@@ -41,7 +41,7 @@ public class ExternalSorter {
             numbers.add(Integer.valueOf(iterator.nextLine()));
             totalLines++;
 
-            if (shouldWriteDataToOutputFile(fileSliceSize, numbers)) {
+            if (getEstimatedFileSize(numbers) > desiredFileSliceSize) {
                 sortAndWriteDataToFile(numbers, tempFileCount);
                 tempFileCount++;
                 numbers.clear();
@@ -72,7 +72,7 @@ public class ExternalSorter {
                 finalSortedNumbers.add(topNumbers[index]);
                 topNumbers[index] = getNextValueFromFileSlice(readers[index]);
 
-                if (shouldWriteDataToOutputFile(fileSliceSize, finalSortedNumbers)) {
+                if (getEstimatedFileSize(finalSortedNumbers) > desiredFileSliceSize) {
                     fileUtil.writeDataToFile(finalSortedNumbers, new File(outputFile));
                     finalSortedNumbers.clear();
                 }
@@ -87,13 +87,8 @@ public class ExternalSorter {
         }
     }
 
-    /**
-     * @param fileSliceSize Size of file slice in bytes
-     * @param data          Data to be written to file
-     * @return True if the estimated file size of data exceeds desired file size, false otherwise
-     */
-    private boolean shouldWriteDataToOutputFile(long fileSliceSize, List<Integer> data) {
-        return (data.size() * INT_SIZE_BYTES) > fileSliceSize;
+    private long getEstimatedFileSize(List<Integer> data) {
+        return (data.size() * INT_SIZE_BYTES);
     }
 
     private void sortAndWriteDataToFile(List<Integer> numbers, int tempFileSuffix) {
