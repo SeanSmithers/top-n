@@ -27,8 +27,7 @@ public class ExternalSortFileUtil {
         try {
             FileUtils.forceMkdir(new File(TEMP_DIR));
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error creating temp directory: " + e.getMessage());
-            throw new ExternalSortException(e.getMessage(), e.getCause());
+            throw new ExternalSortException("Error creating temp directory", e.getCause());
         }
     }
 
@@ -37,8 +36,8 @@ public class ExternalSortFileUtil {
             LOGGER.log(Level.INFO, "Writing data to file: " + file.getAbsolutePath());
             FileUtils.writeLines(file, CHAR_ENCODING, data, true);
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error writing data to file: " + e.getMessage());
-            throw new ExternalSortException(e.getMessage(), e.getCause());
+            throw new ExternalSortException(
+                    "Error writing data to file: " + file.getAbsolutePath(), e.getCause());
         }
     }
 
@@ -59,8 +58,8 @@ public class ExternalSortFileUtil {
         try {
             return FileUtils.lineIterator(file, CHAR_ENCODING);
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error getting line iterator for file: " + file.getAbsolutePath());
-            throw new ExternalSortException(e.getMessage(), e.getCause());
+            throw new ExternalSortException(
+                    "Error getting line iterator for file: " + file.getAbsolutePath(), e.getCause());
         }
     }
 
@@ -81,8 +80,8 @@ public class ExternalSortFileUtil {
                 readers[i] = new BufferedReader(new FileReader(fileSlices.get(i)));
             }
         } catch(IOException e) {
-            LOGGER.log(Level.SEVERE, "Error getting readers for file slices: " + e.getMessage());
-            throw new ExternalSortException(e.getMessage(), e.getCause());
+            throw new ExternalSortException(
+                    "Error getting readers for file slices", e.getCause());
         }
         return readers;
     }

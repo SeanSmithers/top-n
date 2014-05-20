@@ -4,20 +4,13 @@ import org.apache.commons.io.LineIterator;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- * @author Sean Smithers
- */
 public class ExternalSorter {
 
-    private final static Logger LOGGER = Logger.getLogger(ExternalSorter.class.getName());
     private String inputFile;
     private String outputFile;
     private long fileSliceSize;
@@ -88,8 +81,7 @@ public class ExternalSorter {
             }
 
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error during sort: " + e.getMessage());
-            throw new ExternalSortException(e.getMessage(), e.getCause());
+            throw new ExternalSortException("Error during sort", e.getCause());
         }
     }
 
