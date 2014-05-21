@@ -1,4 +1,4 @@
-package com.seansmithers.intercomscreening;
+package com.seansmithers.topn;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;

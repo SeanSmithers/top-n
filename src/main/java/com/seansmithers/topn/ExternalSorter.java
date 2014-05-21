@@ -1,4 +1,4 @@
-package com.seansmithers.intercomscreening;
+package com.seansmithers.topn;
 
 import org.apache.commons.io.LineIterator;
 

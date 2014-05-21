@@ -1,4 +1,4 @@
-package com.seansmithers.intercomscreening;
+package com.seansmithers.topn;
 
 public class ExternalSortException extends RuntimeException {
 

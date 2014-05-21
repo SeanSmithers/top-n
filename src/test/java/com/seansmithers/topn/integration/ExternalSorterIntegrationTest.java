@@ -1,6 +1,6 @@
-package com.seansmithers.intercomscreening.integration;
+package com.seansmithers.topn.integration;
 
-import com.seansmithers.intercomscreening.ExternalSorter;
+import com.seansmithers.topn.ExternalSorter;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Test;

@@ -63,7 +63,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.seansmithers.intercomscreening.TopNSolution</mainClass>
+                            <mainClass>com.seansmithers.topn.TopNSolution</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
