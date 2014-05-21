@@ -1,4 +1,5 @@
 # top-n
+Find the largest N numbers in a file where each line of the file contains a single integer.
 
 ## Building
 ```bash
