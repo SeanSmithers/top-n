@@ -33,14 +33,17 @@ public class CommandLineOptions {
     private Options getOptions() {
         Options options = new Options();
         options.addOption(OptionBuilder.withDescription("Input file")
+                .withLongOpt("input")
                 .isRequired()
                 .hasArg()
                 .create("i"));
         options.addOption(OptionBuilder.withDescription("Output file")
+                .withLongOpt("output")
                 .isRequired()
                 .hasArg()
                 .create("o"));
         options.addOption(OptionBuilder.withDescription("File slice size in bytes. Defaults to 10MB")
+                .withLongOpt("blocksize")
                 .hasArg()
                 .create("b"));
         options.addOption(OptionBuilder.withDescription("Number of elements to find")

@@ -30,26 +30,30 @@ public class ExternalSorter {
         mergeSortedFileSlicesIntoOutputFile();
     }
 
+    public List<Integer> readTopNNumbersFromOutputFile(int numberOfElements) {
+        return fileUtil.readTopNLinesFromFile(new File(outputFile), numberOfElements);
+    }
+
     private void splitFileIntoSortedSlices(File file, long desiredFileSliceSize) {
 
-        List<Integer> numbers = new ArrayList<Integer>();
+        List<Integer> fileSliceData = new ArrayList<Integer>();
         LineIterator iterator = fileUtil.getLineIteratorForFile(file);
         long totalLines = 0;
         int tempFileCount = 0;
 
         while (iterator.hasNext()) {
-            numbers.add(Integer.valueOf(iterator.nextLine()));
+            fileSliceData.add(Integer.valueOf(iterator.nextLine()));
             totalLines++;
 
-            if (getEstimatedFileSize(numbers) > desiredFileSliceSize) {
-                sortAndWriteDataToFile(numbers, tempFileCount);
+            if (getEstimatedFileSize(fileSliceData) > desiredFileSliceSize) {
+                sortAndWriteDataToFile(fileSliceData, tempFileCount);
                 tempFileCount++;
-                numbers.clear();
+                fileSliceData.clear();
             }
         }
         // Write remaining data to disk
-        if (numbers.size() > 0) {
-            sortAndWriteDataToFile(numbers, tempFileCount);
+        if (fileSliceData.size() > 0) {
+            sortAndWriteDataToFile(fileSliceData, tempFileCount);
         }
 
         LineIterator.closeQuietly(iterator);
@@ -65,21 +69,21 @@ public class ExternalSorter {
                 topNumbers[i] = Integer.valueOf(readers[i].readLine());
             }
 
-            List<Integer> finalSortedNumbers = new ArrayList<Integer>();
+            List<Integer> finalSortedData = new ArrayList<Integer>();
             for (int i = 0; i < inputFileTotalLines; i++) {
 
                 int index = findIndexOfMaxValue(topNumbers);
-                finalSortedNumbers.add(topNumbers[index]);
+                finalSortedData.add(topNumbers[index]);
                 topNumbers[index] = getNextValueFromFileSlice(readers[index]);
 
-                if (getEstimatedFileSize(finalSortedNumbers) > desiredFileSliceSize) {
-                    fileUtil.writeDataToFile(finalSortedNumbers, new File(outputFile));
-                    finalSortedNumbers.clear();
+                if (getEstimatedFileSize(finalSortedData) > desiredFileSliceSize) {
+                    fileUtil.writeDataToFile(finalSortedData, new File(outputFile));
+                    finalSortedData.clear();
                 }
             }
             // Write remaining data to disk
-            if (finalSortedNumbers.size() > 0) {
-                fileUtil.writeDataToFile(finalSortedNumbers, new File(outputFile));
+            if (finalSortedData.size() > 0) {
+                fileUtil.writeDataToFile(finalSortedData, new File(outputFile));
             }
 
         } catch (IOException e) {
@@ -91,19 +95,19 @@ public class ExternalSorter {
         return (data.size() * INT_SIZE_BYTES);
     }
 
-    private void sortAndWriteDataToFile(List<Integer> numbers, int tempFileSuffix) {
-        Collections.sort(numbers, Collections.reverseOrder());
+    private void sortAndWriteDataToFile(List<Integer> data, int tempFileSuffix) {
+        Collections.sort(data, Collections.reverseOrder());
         File slice = new File(fileUtil.getFileSliceName(tempFileSuffix));
         slice.deleteOnExit();
-        fileUtil.writeDataToFile(numbers, slice);
+        fileUtil.writeDataToFile(data, slice);
     }
 
-    private int findIndexOfMaxValue(int[] topNumbers) {
+    private int findIndexOfMaxValue(int[] values) {
         int max = Integer.MIN_VALUE;
         int index = 0;
 
-        for (int i = 0; i < topNumbers.length; i++) {
-            if (topNumbers[i] > max) {
+        for (int i = 0; i < values.length; i++) {
+            if (values[i] > max) {
                 index = i;
             }
         }
@@ -113,9 +117,5 @@ public class ExternalSorter {
     private int getNextValueFromFileSlice(BufferedReader reader) throws IOException {
         String next = reader.readLine();
         return (next == null) ? Integer.MIN_VALUE : Integer.valueOf(next);
-    }
-
-    public List<Integer> readTopNNumbersFromOutputFile(int numberOfElements) {
-        return fileUtil.readTopNLinesFromFile(new File(outputFile), numberOfElements);
     }
 }
