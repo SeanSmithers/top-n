@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 public class ExternalSortFileUtil {
 
-    private final static Logger LOGGER = Logger.getLogger(ExternalSortFileUtil.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ExternalSortFileUtil.class.getName());
     private static final String CHAR_ENCODING = Charset.defaultCharset().displayName();
     public static final String TEMP_DIR = FileUtils.getTempDirectoryPath() + "external-sort/";
     public static final String TEMP_SLICE_FILE_NAME = "slice-{0}";
@@ -78,7 +78,7 @@ public class ExternalSortFileUtil {
             for (int i = 0; i < readers.length; i++) {
                 readers[i] = new BufferedReader(new FileReader(fileSlices.get(i)));
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new ExternalSortException(
                     "Error getting readers for file slices", e.getCause());
         }
