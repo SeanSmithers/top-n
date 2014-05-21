@@ -16,8 +16,8 @@ java -jar path/to/target/top-n-1.0-jar-with-dependencies.jar [OPTIONS]
 
 ```bash
 usage: java -jar top-n-1.0-jar-with-dependencies.jar [OPTIONS]
-    -b <arg>   File slice size in bytes. Defaults to 10MB
-    -i <arg>   Input file
-    -n <arg>   Number of elements to find
-    -o <arg>   Output file
+ -b,--blocksize <arg>   File slice size in bytes. Defaults to 10MB
+ -i,--input <arg>       Input file
+ -n <arg>               Number of elements to find
+ -o,--output <arg>      Output file
 ```
