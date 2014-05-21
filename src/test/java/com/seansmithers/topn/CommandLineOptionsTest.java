@@ -33,7 +33,6 @@ public class CommandLineOptionsTest {
         when(parser.parse(any(Options.class), any(String[].class))).thenReturn(commandLine);
 
         commandLineOptions.parseCommandLineArguments(new String[10]);
-
         verifyParserMethodCalls();
     }
 
@@ -42,7 +41,6 @@ public class CommandLineOptionsTest {
         when(parser.parse(any(Options.class), any(String[].class))).thenThrow(new ParseException("Test"));
 
         commandLineOptions.parseCommandLineArguments(new String[10]);
-
         verifyParserMethodCalls();
         verify(helpFormatter).printHelp(anyString(), any(Options.class));
     }

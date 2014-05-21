@@ -39,7 +39,6 @@ public class ExternalSortFileUtilTest {
     @Before
     public void setUp() throws Exception {
         setUpFileUtilsMocks();
-
         fileUtil = new ExternalSortFileUtil();
     }
 
@@ -52,7 +51,6 @@ public class ExternalSortFileUtilTest {
     @Test
     public void testWriteDataToFile() {
         fileUtil.writeDataToFile(Lists.newArrayList(1, 2, 3), new File("test"));
-
         PowerMockito.verifyStatic();
     }
 
@@ -62,7 +60,6 @@ public class ExternalSortFileUtilTest {
         FileUtils.writeLines(any(File.class), anyString(), anyListOf(Integer.class), anyBoolean());
 
         fileUtil.writeDataToFile(Lists.newArrayList(1, 2, 3), new File("test"));
-
         PowerMockito.verifyStatic();
     }
 
@@ -72,7 +69,6 @@ public class ExternalSortFileUtilTest {
         when(lineIterator.nextLine()).thenReturn(String.valueOf(RANDOM.nextInt()));
 
         List<Integer> result = fileUtil.readTopNLinesFromFile(new File(""), 3);
-
         assertThat(result.size(), is(3));
         PowerMockito.verifyStatic();
     }
@@ -80,7 +76,6 @@ public class ExternalSortFileUtilTest {
     @Test
     public void testGetLineIteratorForFile() {
         LineIterator lineIterator = fileUtil.getLineIteratorForFile(new File(""));
-
         assertThat(lineIterator, notNullValue());
         PowerMockito.verifyStatic();
     }
@@ -90,7 +85,6 @@ public class ExternalSortFileUtilTest {
         PowerMockito.when(FileUtils.lineIterator(any(File.class), anyString())).thenThrow(new IOException());
 
         LineIterator lineIterator = fileUtil.getLineIteratorForFile(new File(""));
-
         assertThat(lineIterator, notNullValue());
         PowerMockito.verifyStatic();
     }
@@ -103,7 +97,6 @@ public class ExternalSortFileUtilTest {
     @Test
     public void getFileSlices() {
         List<File> result = fileUtil.getFileSlices();
-
         assertThat(result.size(), is(3));
         PowerMockito.verifyStatic();
     }
