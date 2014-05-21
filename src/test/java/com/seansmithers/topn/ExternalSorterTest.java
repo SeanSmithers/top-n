@@ -15,8 +15,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyListOf;
@@ -66,6 +69,21 @@ public class ExternalSorterTest {
         doThrow(new ExternalSortException()).when(fileUtil).writeDataToFile(anyListOf(Integer.class), any(File.class));
         externalSorter.sortInputFile();
         verify(lineIterator);
+    }
+
+    @Test(expected = ExternalSortException.class)
+    public void testSortInputFileFileUtilGetLineIteratorForFileThrowsException() throws IOException {
+        doThrow(new ExternalSortException()).when(fileUtil).getLineIteratorForFile(any(File.class));
+        externalSorter.sortInputFile();
+        verify(lineIterator);
+    }
+
+    @Test
+    public void testReadTopNNumbersFromOutputFile() {
+        when(fileUtil.readTopNLinesFromFile(any(File.class), anyInt())).thenReturn(Lists.newArrayList(100, 99, 98));
+        List<Integer> result = externalSorter.readTopNNumbersFromOutputFile(3);
+        assertThat(result.size(), is(3));
+        verify(fileUtil).readTopNLinesFromFile(any(File.class), anyInt());
     }
 
     private void setUpFileUtilsMocks() {
