@@ -43,15 +43,15 @@ public class ExternalSortFileUtil {
 
     public List<Integer> readTopNLinesFromFile(File file, int numberOfLines) {
 
-        List<Integer> numbers = new ArrayList<Integer>(numberOfLines);
+        List<Integer> topNumbers = new ArrayList<Integer>(numberOfLines);
         LineIterator iterator = getLineIteratorForFile(file);
 
-        while (iterator.hasNext() && (numbers.size() < numberOfLines)) {
-            numbers.add(Integer.valueOf(iterator.nextLine()));
+        while (iterator.hasNext() && (topNumbers.size() < numberOfLines)) {
+            topNumbers.add(Integer.valueOf(iterator.nextLine()));
         }
 
         LineIterator.closeQuietly(iterator);
-        return numbers;
+        return topNumbers;
     }
 
     public LineIterator getLineIteratorForFile(File file) {
@@ -64,8 +64,7 @@ public class ExternalSortFileUtil {
     }
 
     public String getFileSliceName(int tempFileSuffix) {
-        return ExternalSortFileUtil.TEMP_DIR
-                + MessageFormat.format(ExternalSortFileUtil.TEMP_SLICE_FILE_NAME, tempFileSuffix);
+        return TEMP_DIR + MessageFormat.format(TEMP_SLICE_FILE_NAME, tempFileSuffix);
     }
 
     public List<File> getFileSlices() {
