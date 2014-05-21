@@ -57,7 +57,7 @@ public class ExternalSortFileUtilTest {
     }
 
     @Test(expected = ExternalSortException.class)
-    public void testWriteDataToFile_throwsException() throws Exception {
+    public void testWriteDataToFileThrowsException() throws Exception {
         PowerMockito.doThrow(new IOException()).when(FileUtils.class);
         FileUtils.writeLines(any(File.class), anyString(), anyListOf(Integer.class), anyBoolean());
 
@@ -86,7 +86,7 @@ public class ExternalSortFileUtilTest {
     }
 
     @Test(expected = ExternalSortException.class)
-    public void testGetLineIteratorForFile_throwsException() throws Exception {
+    public void testGetLineIteratorForFileThrowsException() throws Exception {
         PowerMockito.when(FileUtils.lineIterator(any(File.class), anyString())).thenThrow(new IOException());
 
         LineIterator lineIterator = fileUtil.getLineIteratorForFile(new File(""));

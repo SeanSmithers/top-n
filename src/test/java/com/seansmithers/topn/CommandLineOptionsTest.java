@@ -38,7 +38,7 @@ public class CommandLineOptionsTest {
     }
 
     @Test(expected = ExternalSortException.class)
-    public void testParseCommandLineArguments_CommandLineParserThrowsException() throws Exception {
+    public void testParseCommandLineArgumentsCommandLineParserThrowsException() throws Exception {
         when(parser.parse(any(Options.class), any(String[].class))).thenThrow(new ParseException("Test"));
 
         commandLineOptions.parseCommandLineArguments(new String[10]);
